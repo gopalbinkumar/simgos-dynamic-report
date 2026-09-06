@@ -1,0 +1,37 @@
+<?php
+
+use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\DynamicReportController;
+use App\Http\Controllers\MasterDataController;
+use App\Http\Controllers\ReportingController;
+use App\Http\Controllers\SystemController;
+use Illuminate\Support\Facades\Route;
+
+/*
+|--------------------------------------------------------------------------
+| Web Routes
+|--------------------------------------------------------------------------
+|
+| Here is where you can register web routes for your application. These
+| routes are loaded by the RouteServiceProvider and all of them will
+| be assigned to the "web" middleware group. Make something great!
+|
+*/
+
+Route::get('/', [DashboardController::class, 'index'])->name('dashboard');
+Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard.overview');
+
+Route::get('/dynamic-report', [DynamicReportController::class, 'index'])->name('reports.dynamic');
+Route::post('/dynamic-report', [DynamicReportController::class, 'run'])->name('reports.dynamic.run');
+Route::get('/dynamic-report/reset', [DynamicReportController::class, 'reset'])->name('reports.dynamic.reset');
+Route::get('/dynamic-report/export', [DynamicReportController::class, 'export'])->name('reports.dynamic.export');
+
+Route::get('/master-data/{resource}', [MasterDataController::class, 'index'])
+    ->whereIn('resource', ['informasi', 'pegawai', 'dokter', 'poli', 'ruangan'])
+    ->name('master-data.index');
+
+Route::get('/saved-reports', [ReportingController::class, 'savedReports'])->name('reports.saved');
+Route::get('/report-history', [ReportingController::class, 'history'])->name('reports.history');
+
+Route::get('/database-status', [SystemController::class, 'databaseStatus'])->name('system.database-status');
+Route::get('/about', [SystemController::class, 'about'])->name('system.about');
