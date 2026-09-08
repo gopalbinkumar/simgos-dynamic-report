@@ -1,5 +1,29 @@
 const sidebar = document.querySelector('[data-sidebar]');
 const overlay = document.querySelector('[data-sidebar-overlay]');
+const appShell = document.querySelector('[data-app-shell]');
+const collapseButton = document.querySelector('[data-sidebar-collapse]');
+
+if (appShell && collapseButton) {
+    const collapsedStorageKey = 'simgos-sidebar-collapsed';
+    const preloadClass = 'sidebar-collapsed-preload';
+    const isCollapsed = window.localStorage.getItem(collapsedStorageKey) === 'true';
+
+    if (window.innerWidth > 820 && isCollapsed) {
+        appShell.classList.add('sidebar-collapsed');
+        collapseButton.setAttribute('aria-expanded', 'false');
+        collapseButton.setAttribute('aria-label', 'Perluas sidebar');
+        collapseButton.setAttribute('title', 'Perluas sidebar');
+    }
+
+    collapseButton.addEventListener('click', () => {
+        const collapsed = appShell.classList.toggle('sidebar-collapsed');
+        window.localStorage.setItem(collapsedStorageKey, String(collapsed));
+        document.documentElement.classList.toggle(preloadClass, collapsed);
+        collapseButton.setAttribute('aria-expanded', String(!collapsed));
+        collapseButton.setAttribute('aria-label', collapsed ? 'Perluas sidebar' : 'Minimalkan sidebar');
+        collapseButton.setAttribute('title', collapsed ? 'Perluas sidebar' : 'Minimalkan sidebar');
+    });
+}
 
 document.querySelectorAll('[data-sidebar-toggle]').forEach((button) => {
     button.addEventListener('click', () => {

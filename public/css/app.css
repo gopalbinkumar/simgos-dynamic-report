@@ -70,7 +70,7 @@ button {
     border-bottom: 1px solid rgba(255, 255, 255, 0.08);
 }
 .brand-mark {
-    display: grid;
+    display: none;
     width: 38px;
     height: 38px;
     place-items: center;
@@ -81,6 +81,9 @@ button {
     font-weight: 800;
     letter-spacing: -0.03em;
     box-shadow: 0 5px 16px rgba(2, 125, 120, 0.3);
+}
+.brand-copy {
+    min-width: 0;
 }
 .brand-name {
     color: white;
@@ -99,6 +102,25 @@ button {
     display: none !important;
     margin-left: auto;
     color: var(--sidebar-muted) !important;
+}
+.sidebar-collapse {
+    width: 29px;
+    height: 29px;
+    margin-left: auto;
+    color: var(--sidebar) !important;
+    border-color: rgba(255, 255, 255, 0.12);
+    background: rgba(255, 255, 255, 0.92);
+    font-size: 10px;
+    transition: 0.18s ease;
+}
+.sidebar-collapse:hover {
+    color: var(--sidebar) !important;
+    border-color: rgba(255, 255, 255, 0.24);
+    background: white;
+}
+.topbar-sidebar-toggle {
+    flex: 0 0 auto;
+    margin-left: 0;
 }
 .sidebar-nav {
     flex: 1;
@@ -122,7 +144,7 @@ button {
     gap: 12px;
     margin: 3px 0;
     padding: 10px 13px;
-    color: var(--sidebar-muted);
+    color: var(--surface);
     border-radius: 8px;
     font-size: 13px;
     font-weight: 500;
@@ -130,7 +152,7 @@ button {
 }
 .nav-link i {
     width: 17px;
-    color: #82a9aa;
+    color: var(--surface);
     text-align: center;
     font-size: 13px;
 }
@@ -184,6 +206,77 @@ button {
 .main-shell {
     min-height: 100vh;
     margin-left: 258px;
+    transition: margin-left 0.2s ease;
+}
+.app-shell.sidebar-collapsed .sidebar {
+    width: 56px;
+    transition: width 0.2s ease;
+}
+.app-shell.sidebar-collapsed .main-shell {
+    margin-left: 56px;
+}
+.app-shell.sidebar-collapsed .brand-lockup {
+    justify-content: center;
+    padding-right: 12px;
+    padding-left: 12px;
+}
+.app-shell.sidebar-collapsed .brand-mark {
+    display: none;
+}
+.app-shell.sidebar-collapsed .brand-copy,
+.app-shell.sidebar-collapsed .nav-group-label,
+.app-shell.sidebar-collapsed .nav-link span,
+.app-shell.sidebar-collapsed .sidebar-footer {
+    display: none;
+}
+.app-shell.sidebar-collapsed .sidebar-collapse {
+    margin-left: 0;
+}
+.app-shell.sidebar-collapsed .sidebar-nav {
+    padding-right: 6px;
+    padding-left: 6px;
+}
+.app-shell.sidebar-collapsed .nav-link {
+    width: 34px;
+    height: 34px;
+    margin: 3px auto;
+    justify-content: center;
+    padding: 0;
+    border-radius: 9px;
+}
+.app-shell.sidebar-collapsed .nav-link i {
+    width: auto;
+    font-size: 14px;
+}
+@media (min-width: 821px) {
+    html.sidebar-collapsed-preload .sidebar {
+        width: 56px;
+    }
+    html.sidebar-collapsed-preload .main-shell {
+        margin-left: 56px;
+    }
+    html.sidebar-collapsed-preload .brand-copy,
+    html.sidebar-collapsed-preload .nav-group-label,
+    html.sidebar-collapsed-preload .nav-link span,
+    html.sidebar-collapsed-preload .sidebar-footer {
+        display: none;
+    }
+    html.sidebar-collapsed-preload .sidebar-nav {
+        padding-right: 6px;
+        padding-left: 6px;
+    }
+    html.sidebar-collapsed-preload .nav-link {
+        width: 34px;
+        height: 34px;
+        margin: 3px auto;
+        justify-content: center;
+        padding: 0;
+        border-radius: 9px;
+    }
+    html.sidebar-collapsed-preload .nav-link i {
+        width: auto;
+        font-size: 14px;
+    }
 }
 .topbar {
     position: sticky;
@@ -197,6 +290,12 @@ button {
     border-bottom: 1px solid var(--border);
     background: rgba(255, 255, 255, 0.93);
     backdrop-filter: blur(12px);
+}
+.topbar-leading {
+    display: flex;
+    min-width: 0;
+    align-items: center;
+    gap: 12px;
 }
 .topbar-context {
     display: flex;
@@ -263,7 +362,6 @@ button {
 }
 .mobile-menu-button {
     display: none;
-    margin-right: 12px;
 }
 .page-content {
     max-width: 1536px;
@@ -1086,9 +1184,48 @@ code {
     }
 }
 @media (max-width: 820px) {
+    .app-shell.sidebar-collapsed .sidebar {
+        width: 258px;
+    }
+    .app-shell.sidebar-collapsed .main-shell {
+        margin-left: 0;
+    }
+    .app-shell.sidebar-collapsed .brand-lockup {
+        justify-content: flex-start;
+        padding-right: 22px;
+        padding-left: 22px;
+    }
+    .app-shell.sidebar-collapsed .brand-mark,
+    .app-shell.sidebar-collapsed .sidebar-collapse {
+        display: none;
+    }
+    .app-shell.sidebar-collapsed .brand-copy,
+    .app-shell.sidebar-collapsed .nav-group-label,
+    .app-shell.sidebar-collapsed .nav-link span,
+    .app-shell.sidebar-collapsed .sidebar-footer {
+        display: revert;
+    }
+    .app-shell.sidebar-collapsed .sidebar-nav {
+        padding: 22px 13px;
+    }
+    .app-shell.sidebar-collapsed .nav-link {
+        width: auto;
+        height: auto;
+        margin: 3px 0;
+        justify-content: flex-start;
+        padding-right: 13px;
+        padding-left: 13px;
+    }
+    .app-shell.sidebar-collapsed .nav-link i {
+        width: 17px;
+        font-size: 13px;
+    }
     .sidebar {
         transform: translateX(-100%);
         transition: transform 0.2s ease;
+    }
+    .sidebar-collapse {
+        display: none !important;
     }
     .sidebar.open {
         transform: translateX(0);
@@ -1114,6 +1251,9 @@ code {
     }
     .mobile-menu-button {
         display: grid;
+    }
+    .topbar-sidebar-toggle {
+        display: none !important;
     }
     .topbar-context {
         margin-right: auto;

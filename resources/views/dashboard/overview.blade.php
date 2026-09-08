@@ -10,7 +10,7 @@
             <h1>Dashboard Overview</h1>
             <p>Ringkasan data SIMRS SIMGOS untuk pemantauan operasional.</p>
         </div>
-        <a href="{{ route('reports.dynamic') }}" class="button button-primary"><i class="fa-solid fa-wand-magic-sparkles"></i>
+        <a href="{{ route('reports.dynamic') }}" class="button button-primary"><i class="fa-solid fa-pen"></i>
             Buat Dynamic Report</a>
     </div>
 
@@ -50,17 +50,23 @@
                     <option value="diagnosa" @selected($filters['category'] === 'diagnosa')>Diagnosa</option>
                 </select></label>
         </div>
-        <div class="filter-actions" style="display: flex; align-items: center; gap: 12px;">
+        <div class="filter-actions" style="display: flex; align-items: center; justify-content: space-between; gap: 12px;">
+            <span><i class="fa-solid fa-database"></i> Chart menggunakan agregasi read-only dari database SIMGOS.</span>
             <button type="submit" class="button button-primary">
                 <i class="fa-solid fa-filter"></i> Terapkan Filter
             </button>
         </div>
     </form>
 
+    @if ($dataWarning)
+        <div class="flash flash-error"><i class="fa-solid fa-triangle-exclamation"></i>{{ $dataWarning }}</div>
+    @endif
+
     <div class="section-heading">
         <div><span class="eyebrow">EXECUTIVE SUMMARY</span>
             <h2>Indikator utama</h2>
-        </div><span class="last-updated"><i class="fa-regular fa-clock"></i> Diperbarui hari ini</span>
+        </div><span class="last-updated"><i class="fa-regular fa-clock"></i>
+            {{ $lastUpdated ? 'Diperbarui ' . $lastUpdated : 'Belum ada data' }}</span>
     </div>
     <div class="stats-grid">
         @foreach ($stats as $stat)

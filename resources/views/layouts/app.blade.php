@@ -10,7 +10,19 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+    <script>
+        (function () {
+            try {
+                if (window.innerWidth > 820 && window.localStorage.getItem('simgos-sidebar-collapsed') === 'true') {
+                    document.documentElement.classList.add('sidebar-collapsed-preload');
+                }
+            } catch (error) {
+                // Ignore storage restrictions and let the regular sidebar behavior continue.
+            }
+        })();
+    </script>
     <link rel="stylesheet" href="{{ asset('css/app.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/ai-chat.css') }}">
     @stack('head')
 </head>
 
@@ -20,17 +32,24 @@
 
         <div class="main-shell">
             <header class="topbar">
-                <button type="button" class="icon-button mobile-menu-button" data-sidebar-toggle
-                    aria-label="Buka menu">
-                    <i class="fa-solid fa-bars"></i>
-                </button>
-                <div class="topbar-context">
-                    <span class="topbar-title">SIMRS Reporting Platform</span>
-                    {{-- <span class="topbar-title">SIMGOS Dynamic Report</span> --}}
+                <div class="topbar-leading">
+                    <button type="button" class="icon-button mobile-menu-button" data-sidebar-toggle
+                        aria-label="Buka menu">
+                        <i class="fa-solid fa-bars"></i>
+                    </button>
+                    <button type="button" class="icon-button sidebar-collapse topbar-sidebar-toggle"
+                        data-sidebar-collapse aria-label="Minimalkan sidebar" aria-expanded="true"
+                        title="Minimalkan sidebar">
+                        <i class="fa-solid fa-bars"></i>
+                    </button>
+                    <div class="topbar-context">
+                        <span class="topbar-title">SIMRS Reporting Platform</span>
+                        {{-- <span class="topbar-title">SIMGOS Dynamic Report</span> --}}
+                    </div>
                 </div>
                 <div class="topbar-actions">
                     <span class="connection-pill"><span></span> Read-only mode</span>
-                    <div class="avatar">SG</div>
+                    {{-- <div class="avatar">SG</div> --}}
                 </div>
             </header>
 
@@ -52,9 +71,11 @@
     </div>
 
     <div class="sidebar-overlay" data-sidebar-overlay></div>
+    @include('components.ai-chat-widget')
     <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.4/dist/chart.umd.min.js"></script>
-    <script src="{{ asset('js/app.js') }}"></script>
     @stack('scripts')
+    <script src="{{ asset('js/app.js') }}"></script>
+    <script src="{{ asset('js/ai-chat.js') }}"></script>
 </body>
 
 </html>

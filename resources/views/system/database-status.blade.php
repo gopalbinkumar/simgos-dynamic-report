@@ -74,7 +74,8 @@
                             <td><strong>{{ $table['name'] }}</strong></td>
                             <td>{{ $table['type'] }}</td>
                             <td>{{ $table['rows'] }}</td>
-                            <td><span class="badge {{ $table['status'] === 'Available' ? 'badge-success' : 'badge-neutral' }}"><i
+                            <td><span
+                                    class="badge {{ $table['status'] === 'Available' ? 'badge-success' : 'badge-neutral' }}"><i
                                         class="fa-solid {{ $table['status'] === 'Available' ? 'fa-check' : 'fa-triangle-exclamation' }}"></i>
                                     {{ $table['status'] }}</span></td>
                     </tr>@empty<tr>
