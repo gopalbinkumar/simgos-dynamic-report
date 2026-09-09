@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Support\SimgosData;
 use Illuminate\Http\Request;
+use Illuminate\Pagination\LengthAwarePaginator;
 
 class DynamicReportController extends Controller
 {
@@ -35,7 +36,7 @@ class DynamicReportController extends Controller
             'showReport' => $showReport,
             'sources' => self::SOURCES,
             'availableColumns' => self::COLUMNS,
-            'rows' => $showReport ? $this->rows($state) : [],
+            'rows' => $showReport ? $this->paginateRows($this->rows($state), $request) : collect(),
         ]);
     }
 
@@ -142,6 +143,25 @@ class DynamicReportController extends Controller
         });
 
         return $rows;
+    }
+
+    private function paginateRows(array $rows, Request $request): LengthAwarePaginator
+    {
+        $perPage = 10;
+        $page = LengthAwarePaginator::resolveCurrentPage('report_page');
+        $items = collect($rows);
+
+        return new LengthAwarePaginator(
+            $items->forPage($page, $perPage)->values(),
+            $items->count(),
+            $perPage,
+            $page,
+            [
+                'path' => $request->url(),
+                'query' => $request->query(),
+                'pageName' => 'report_page',
+            ],
+        );
     }
 
     private function normalizeRow(array $raw): array

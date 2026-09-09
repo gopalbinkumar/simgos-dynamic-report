@@ -34,7 +34,7 @@ class MasterDataController extends Controller
         }
 
         $rows = SimgosData::tableExists($table)
-            ? $query->select($columns)->paginate(25)->withQueryString()
+            ? $query->select($columns)->paginate(10, $columns, 'page')->withQueryString()
             : collect();
 
         return view('master-data.index', [

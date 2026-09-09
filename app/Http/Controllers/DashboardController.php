@@ -18,9 +18,6 @@ class DashboardController extends Controller
             'date_from' => $this->dateInput($request->input('date_from'), now()->startOfMonth()),
             'date_to' => $this->dateInput($request->input('date_to'), now()),
             'unit' => (string) $request->input('unit', ''),
-            'room' => (string) $request->input('room', ''),
-            'doctor' => (string) $request->input('doctor', ''),
-            'category' => (string) $request->input('category', ''),
         ];
 
         if ($filters['date_from'] > $filters['date_to']) {

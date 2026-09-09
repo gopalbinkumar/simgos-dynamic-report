@@ -24,10 +24,14 @@ class SystemController extends Controller
                 'port' => config('database.connections.' . config('database.default') . '.port'),
             ];
 
-            $tables = collect($connection->select(
-                'SELECT TABLE_NAME, TABLE_TYPE FROM information_schema.tables WHERE TABLE_SCHEMA = ? ORDER BY TABLE_NAME',
-                [$databaseName],
-            ))->map(function (object $table) use ($connection): array {
+            $tables = $connection->table('information_schema.tables')
+                ->select(['TABLE_NAME', 'TABLE_TYPE'])
+                ->where('TABLE_SCHEMA', $databaseName)
+                ->orderBy('TABLE_NAME')
+                ->paginate(10, ['*'], 'table_page')
+                ->withQueryString();
+
+            $tables->getCollection()->transform(function (object $table) use ($connection): array {
                 $tableName = (string) $table->TABLE_NAME;
 
                 try {
@@ -49,7 +53,7 @@ class SystemController extends Controller
                         'status' => 'Read error',
                     ];
                 }
-            })->all();
+            });
         } catch (\Throwable) {
             $database = [
                 'status' => 'Unavailable',

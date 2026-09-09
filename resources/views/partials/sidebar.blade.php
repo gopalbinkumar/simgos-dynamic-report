@@ -15,16 +15,23 @@
             <a href="{{ route('dashboard') }}"
                 class="nav-link {{ request()->routeIs('dashboard*') ? 'active' : '' }}" title="Overview"><i
                     class="fa-solid fa-chart-pie"></i><span>Overview</span></a>
-            <a href="{{ route('reports.dynamic') }}"
+            {{-- <a href="{{ route('reports.dynamic') }}"
                 class="nav-link {{ request()->routeIs('reports.dynamic*') ? 'active' : '' }}" title="Dynamic Report"><i
-                    class="fa-solid fa-sliders"></i><span>Dynamic Report</span></a>
+                    class="fa-solid fa-sliders"></i><span>Dynamic Report</span></a> --}}
         </div>
 
         <div class="nav-group">
-            <div class="nav-group-label">Master Data</div>
-            @foreach (['informasi' => ['Informasi', 'fa-circle-info'], 'pegawai' => ['Pegawai', 'fa-users'], 'dokter' => ['Dokter', 'fa-user-doctor'], 'poli' => ['Poli', 'fa-hospital'], 'ruangan' => ['Ruangan', 'fa-bed']] as $key => $item)
-                <a href="{{ route('master-data.index', $key) }}"
-                    class="nav-link {{ request()->is('master-data/' . $key) ? 'active' : '' }}" title="{{ $item[0] }}"><i
+            <div class="nav-group-label">Data & Analitik</div>
+            @foreach ([
+                'diagnosa' => ['Diagnosa', 'fa-stethoscope'],
+                'klaim' => ['Klaim', 'fa-file-invoice-dollar'],
+                'pasien-kunjungan' => ['Pasien & Kunjungan', 'fa-hospital-user'],
+                'pelayanan-igd' => ['Pelayanan & IGD', 'fa-truck-medical'],
+                'keuangan' => ['Keuangan', 'fa-wallet'],
+                'statistik-indikator' => ['Statistik & Indikator', 'fa-chart-line'],
+            ] as $key => $item)
+                <a href="{{ route('analytics.index', $key) }}"
+                    class="nav-link {{ request()->routeIs('analytics.index') && request()->route('section') === $key ? 'active' : '' }}" title="{{ $item[0] }}"><i
                         class="fa-solid {{ $item[1] }}"></i><span>{{ $item[0] }}</span></a>
             @endforeach
         </div>

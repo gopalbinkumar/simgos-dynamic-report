@@ -9,9 +9,9 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.3.1/css/all.min.css">
     <script>
-        (function () {
+        (function() {
             try {
                 if (window.innerWidth > 820 && window.localStorage.getItem('simgos-sidebar-collapsed') === 'true') {
                     document.documentElement.classList.add('sidebar-collapsed-preload');
@@ -47,9 +47,9 @@
                         {{-- <span class="topbar-title">SIMGOS Dynamic Report</span> --}}
                     </div>
                 </div>
-                <div class="topbar-actions">
+                <div class="topbar-actions" style="display: none">
                     <span class="connection-pill"><span></span> Read-only mode</span>
-                    {{-- <div class="avatar">SG</div> --}}
+                    <div class="avatar">SG</div>
                 </div>
             </header>
 

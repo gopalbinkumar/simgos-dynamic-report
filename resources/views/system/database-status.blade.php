@@ -89,5 +89,8 @@
                 </tbody>
             </table>
         </div>
+        @if (method_exists($tables, 'hasPages'))
+            @include('partials.paginator', ['paginator' => $tables])
+        @endif
     </section>
 @endsection

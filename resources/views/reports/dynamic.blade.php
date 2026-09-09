@@ -117,7 +117,7 @@
             <div class="card-heading results-heading">
                 <div><span class="eyebrow">REPORT RESULT</span>
                     <h2>Hasil Report</h2>
-                    <p>{{ count($rows) }} baris ditampilkan. Kolom tabel mengikuti pilihan pada builder.</p>
+                    <p>{{ $rows->total() }} baris tersedia. Kolom tabel mengikuti pilihan pada builder.</p>
                 </div>
                 <div class="table-actions"><a href="{{ route('reports.dynamic.export') }}" class="button button-outline"><i
                             class="fa-solid fa-file-csv"></i> Export Excel</a><button type="button"
@@ -165,6 +165,7 @@
                     </tbody>
                 </table>
             </div>
+            @include('partials.paginator', ['paginator' => $rows])
         </section>
     @endif
 @endsection

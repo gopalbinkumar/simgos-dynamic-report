@@ -16,38 +16,20 @@
 
     <form class="card filter-card" method="GET" action="{{ route('dashboard') }}">
         <div class="card-heading compact-heading">
-            <div><span class="eyebrow">FILTER DATA</span>
-                <h2>Periode & dimensi</h2>
-            </div><button class="text-button" type="reset"><i class="fa-solid fa-rotate-left"></i> Reset</button>
+            <div><span class="eyebrow">FILTER DATASET</span>
+                <h2>Periode & unit pelayanan</h2>
+            </div><a class="text-button" href="{{ route('dashboard') }}"><i class="fa-solid fa-rotate-left"></i> Reset</a>
         </div>
-        <div class="filter-grid">
+        <div class="filter-grid dashboard-filter-grid">
             <label class="field"><span>Dari tanggal</span><input type="date" name="date_from"
                     value="{{ $filters['date_from'] }}"></label>
             <label class="field"><span>Sampai tanggal</span><input type="date" name="date_to"
                     value="{{ $filters['date_to'] }}"></label>
             <label class="field"><span>Unit / Poli</span><select name="unit">
-                    <option value="">Semua unit</option>
-                    <option value="rawat-jalan" @selected($filters['unit'] === 'rawat-jalan')>Rawat Jalan</option>
-                    <option value="rawat-inap" @selected($filters['unit'] === 'rawat-inap')>Rawat Inap</option>
-                    <option value="igd" @selected($filters['unit'] === 'igd')>IGD</option>
-                </select></label>
-            <label class="field"><span>Ruangan</span><select name="room">
-                    <option value="">Semua ruangan</option>
-                    <option value="ruang-a" @selected($filters['room'] === 'ruang-a')>Ruang A</option>
-                    <option value="ruang-b" @selected($filters['room'] === 'ruang-b')>Ruang B</option>
-                    <option value="igd" @selected($filters['room'] === 'igd')>IGD</option>
-                </select></label>
-            <label class="field"><span>Dokter</span><select name="doctor">
-                    <option value="">Semua dokter</option>
-                    <option value="dr-ahmad" @selected($filters['doctor'] === 'dr-ahmad')>dr. Ahmad</option>
-                    <option value="dr-siti" @selected($filters['doctor'] === 'dr-siti')>dr. Siti</option>
-                    <option value="dr-budi" @selected($filters['doctor'] === 'dr-budi')>dr. Budi</option>
-                </select></label>
-            <label class="field"><span>Kategori</span><select name="category">
-                    <option value="">Semua kategori</option>
-                    <option value="pelayanan" @selected($filters['category'] === 'pelayanan')>Pelayanan</option>
-                    <option value="kunjungan" @selected($filters['category'] === 'kunjungan')>Kunjungan</option>
-                    <option value="diagnosa" @selected($filters['category'] === 'diagnosa')>Diagnosa</option>
+                    <option value="">Semua unit dan poli</option>
+                    @foreach ($filterOptions['units'] as $unit)
+                        <option value="{{ $unit }}" @selected($filters['unit'] === $unit)>{{ $unit }}</option>
+                    @endforeach
                 </select></label>
         </div>
         <div class="filter-actions" style="display: flex; align-items: center; justify-content: space-between; gap: 12px;">
@@ -79,6 +61,27 @@
         @endforeach
     </div>
 
+    <div class="section-heading dataset-section-heading">
+        <div><span class="eyebrow">BUSINESS DATASETS</span>
+            <h2>Cakupan dataset SIMGOS</h2>
+        </div><span class="last-updated"><i class="fa-solid fa-layer-group"></i> {{ count($datasetCards) }} kelompok data</span>
+    </div>
+    <div class="dataset-grid">
+        @foreach ($datasetCards as $dataset)
+            <div class="card dataset-card">
+                <div class="dataset-card-top">
+                    <span class="dataset-icon tone-{{ $dataset['tone'] }}"><i class="fa-solid {{ $dataset['icon'] }}"></i></span>
+                    <div>
+                        <strong>{{ $dataset['label'] }}</strong>
+                        <span>{{ $dataset['source_count'] }}/{{ $dataset['table_count'] }} tabel aktif</span>
+                    </div>
+                </div>
+                <p>{{ $dataset['description'] }}</p>
+                <div class="dataset-card-bottom"><span>Baris dalam periode</span><strong>{{ $dataset['rows'] }}</strong></div>
+            </div>
+        @endforeach
+    </div>
+
     <div class="section-heading chart-section-title">
         <div><span class="eyebrow">ANALYTICS</span>
             <h2>Visualisasi data</h2>
@@ -98,26 +101,35 @@
         <div class="card chart-card chart-span-4">
             <div class="card-heading">
                 <div>
-                    <h2>Data Berdasarkan Kategori</h2>
-                    <p>Perbandingan volume kategori</p>
+                    <h2>Kunjungan per Instalasi</h2>
+                    <p>Rawat jalan, rawat inap, dan layanan lainnya</p>
                 </div>
             </div>
-            <div class="chart-container"><canvas data-chart="category"></canvas></div>
+            <div class="chart-container"><canvas data-chart="installation"></canvas></div>
         </div>
         <div class="card chart-card chart-span-5">
             <div class="card-heading">
                 <div>
-                    <h2>Distribusi Data</h2>
-                    <p>Proporsi data pada dashboard</p>
+                    <h2>Distribusi Cara Bayar</h2>
+                    <p>Proporsi kunjungan berdasarkan cara bayar</p>
                 </div>
             </div>
-            <div class="chart-container doughnut-container"><canvas data-chart="distribution"></canvas></div>
+            <div class="chart-container doughnut-container"><canvas data-chart="payment"></canvas></div>
         </div>
         <div class="card chart-card chart-span-7">
             <div class="card-heading">
                 <div>
-                    <h2>Data Berdasarkan Unit / Poli</h2>
-                    <p>Unit dengan aktivitas tertinggi</p>
+                    <h2>Pendapatan vs Penerimaan</h2>
+                    <p>Perbandingan nilai keuangan per hari</p>
+                </div>
+            </div>
+            <div class="chart-container"><canvas data-chart="finance"></canvas></div>
+        </div>
+        <div class="card chart-card chart-span-12">
+            <div class="card-heading">
+                <div>
+                    <h2>Kunjungan Berdasarkan Unit / Poli</h2>
+                    <p>Sepuluh unit atau poli dengan aktivitas tertinggi</p>
                 </div>
             </div>
             <div class="chart-container"><canvas data-chart="unit"></canvas></div>

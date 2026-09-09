@@ -46,7 +46,7 @@
                     </tbody>
                 </table>
             </div>
-            <div class="pagination-wrap">{{ $rows->links() }}</div>
+            @include('partials.paginator', ['paginator' => $rows])
         @else
             <div class="empty-state large"><i class="fa-solid fa-database"></i><strong>Belum ada data untuk
                     ditampilkan</strong><span>Tabel <code>{{ $tableName }}</code> belum tersedia pada koneksi database
