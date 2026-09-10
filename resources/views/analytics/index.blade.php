@@ -10,7 +10,6 @@
             <h1>{{ $section['title'] }}</h1>
             <p>{{ $section['description'] }}</p>
         </div>
-        <span class="page-header-status"><i class="fa-solid fa-database"></i> Read-only database</span>
     </div>
 
     <nav class="analytics-nav" aria-label="Data dan analitik">
@@ -58,7 +57,7 @@
             <div class="stat-card">
                 <div class="stat-top"><span class="stat-label">{{ $stat['label'] }}</span>
                     <span
-                        class="stat-icon tone-{{ $stat['tone'] }}" style="display: none;"><i class="fa-solid {{ $stat['icon'] }}"></i></span>
+                        class="stat-icon tone-{{ $stat['tone'] }}"><i class="fa-solid {{ $stat['icon'] }}"></i></span>
                 </div>
                 <div class="stat-value">{{ $stat['value'] }}</div>
                 <div class="stat-description"><i class="fa-solid fa-database"></i> {{ $stat['description'] }}</div>

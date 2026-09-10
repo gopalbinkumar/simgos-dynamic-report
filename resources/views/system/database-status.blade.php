@@ -55,7 +55,6 @@
         <div class="card-heading">
             <div><span class="eyebrow">SCHEMA INSPECTION</span>
                 <h2>Available Tables</h2>
-                <p>Jumlah baris dihitung langsung dengan COUNT(*) pada setiap tabel atau view.</p>
             </div><span class="count-label">{{ count($tables) }} tabel</span>
         </div>
         <div class="table-wrap">

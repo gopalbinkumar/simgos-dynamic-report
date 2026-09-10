@@ -33,7 +33,6 @@
                 </select></label>
         </div>
         <div class="filter-actions" style="display: flex; align-items: center; justify-content: space-between; gap: 12px;">
-            <span><i class="fa-solid fa-database"></i> Chart menggunakan agregasi read-only dari database SIMGOS.</span>
             <button type="submit" class="button button-primary">
                 <i class="fa-solid fa-filter"></i> Terapkan Filter
             </button>

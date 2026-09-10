@@ -1,9 +1,27 @@
 <?php
 
-namespace App\Services;
+namespace App\Services\Chatbot;
 
-class AiIntentRouter
+class ChatbotIntentRouter
 {
+    /**
+     * Istilah singkat yang umum dipakai saat bertanya melalui chatbot.
+     * Normalisasi ini dilakukan sebelum intent dan periode dianalisis.
+     */
+    private const ALIASES = [
+        'brp' => 'berapa',
+        'jml' => 'jumlah',
+        'tgl' => 'tanggal',
+        'pend' => 'pendapatan',
+        'pndptn' => 'pendapatan',
+        'pendaptan' => 'pendapatan',
+        'penerim' => 'penerimaan',
+        'kunj' => 'kunjungan',
+        'kwnjungan' => 'kunjungan',
+        'diag' => 'diagnosa',
+        'stat' => 'statistik',
+    ];
+
     private const OUT_OF_SCOPE = [
         'cuaca', 'berita', 'politik', 'resep', 'masakan', 'film', 'musik',
         'game', 'olahraga', 'lirik', 'jodoh', 'wisata', 'password', 'coding',
@@ -22,7 +40,7 @@ class AiIntentRouter
         ],
         'visits' => [
             'kunjungan', 'pengunjung', 'pasien', 'rawat jalan', 'rawat inap',
-            'rawat darurat', 'poli', 'unit', 'instalasi',
+            'rawat darurat', 'poli', 'unit', 'instalasi', 'tren',
         ],
         'services' => [
             'pelayanan', 'penunjang', 'igd', 'gawat darurat', 'tempat tidur',
@@ -86,11 +104,46 @@ class AiIntentRouter
 
     private function normalize(string $message): string
     {
-        return trim((string) preg_replace('/\s+/', ' ', mb_strtolower($message)));
+        $normalized = mb_strtolower($message);
+
+        foreach (self::ALIASES as $alias => $replacement) {
+            $normalized = (string) preg_replace(
+                '/(?<![\p{L}\p{N}])' . preg_quote($alias, '/') . '(?![\p{L}\p{N}])/u',
+                $replacement,
+                $normalized
+            );
+        }
+
+        return trim((string) preg_replace('/\s+/', ' ', $normalized));
     }
 
     private function contains(string $message, string $keyword): bool
     {
-        return str_contains($message, mb_strtolower($keyword));
+        $keyword = mb_strtolower($keyword);
+
+        if (str_contains($message, $keyword)) {
+            return true;
+        }
+
+        // Fuzzy match hanya untuk satu kata agar typo ringan tetap terbaca,
+        // tanpa membuat frasa seperti "data dokter" terlalu longgar.
+        if (str_contains($keyword, ' ') || mb_strlen($keyword) < 5) {
+            return false;
+        }
+
+        $tokens = preg_split('/[^\p{L}\p{N}]+/u', $message, -1, PREG_SPLIT_NO_EMPTY) ?: [];
+        $maxDistance = mb_strlen($keyword) >= 8 ? 2 : 1;
+
+        foreach ($tokens as $token) {
+            if (abs(mb_strlen($token) - mb_strlen($keyword)) > $maxDistance) {
+                continue;
+            }
+
+            if (levenshtein($token, $keyword) <= $maxDistance) {
+                return true;
+            }
+        }
+
+        return false;
     }
 }

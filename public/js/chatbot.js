@@ -1,28 +1,27 @@
 (function () {
     'use strict';
 
-    const widget = document.querySelector('[data-ai-widget]');
+    const widget = document.querySelector('[data-chatbot-widget]');
     if (!widget) return;
 
-    const panel = widget.querySelector('[data-ai-panel]');
-    const openButton = widget.querySelector('[data-ai-open]');
-    const closeButton = widget.querySelector('[data-ai-close]');
-    const minimizeButton = widget.querySelector('[data-ai-minimize]');
-    const form = widget.querySelector('[data-ai-form]');
-    const input = widget.querySelector('[data-ai-input]');
-    const sendButton = widget.querySelector('[data-ai-send]');
-    const messages = widget.querySelector('[data-ai-messages]');
-    const welcome = widget.querySelector('[data-ai-welcome]');
-    const endpoint = widget.dataset.aiEndpoint || '/ai/chat';
+    const panel = widget.querySelector('[data-chatbot-panel]');
+    const openButton = widget.querySelector('[data-chatbot-open]');
+    const closeButton = widget.querySelector('[data-chatbot-close]');
+    const minimizeButton = widget.querySelector('[data-chatbot-minimize]');
+    const form = widget.querySelector('[data-chatbot-form]');
+    const input = widget.querySelector('[data-chatbot-input]');
+    const sendButton = widget.querySelector('[data-chatbot-send]');
+    const messages = widget.querySelector('[data-chatbot-messages]');
+    const welcome = widget.querySelector('[data-chatbot-welcome]');
+    const endpoint = widget.dataset.chatbotEndpoint || '/chatbot';
     const csrfToken = document.querySelector('meta[name="csrf-token"]')?.content || '';
-    const conversationHistory = [];
     let isRequesting = false;
 
     function setOpen(isOpen) {
         widget.classList.toggle('is-open', isOpen);
         panel.setAttribute('aria-hidden', String(!isOpen));
         openButton.setAttribute('aria-expanded', String(isOpen));
-        openButton.setAttribute('aria-label', isOpen ? 'AI Assistant sedang terbuka' : 'Buka AI Assistant');
+        openButton.setAttribute('aria-label', isOpen ? 'Chatbot sedang terbuka' : 'Buka Chatbot');
         if (isOpen) window.setTimeout(() => input.focus(), 200);
     }
 
@@ -49,13 +48,13 @@
 
     function addMessage(type, content) {
         const wrapper = document.createElement('div');
-        wrapper.className = `simgos-ai-message ${type}`;
-        if (type === 'ai') {
-            wrapper.innerHTML = `<div class="simgos-ai-message-avatar" aria-hidden="true"><i class="fa-solid fa-robot"></i></div><div><div class="simgos-ai-bubble"></div><div class="simgos-ai-message-meta">AI Assistant · baru saja</div></div>`;
-            wrapper.querySelector('.simgos-ai-bubble').innerHTML = formatAiText(content);
+        wrapper.className = `simgos-chatbot-message ${type}`;
+        if (type === 'chatbot') {
+            wrapper.innerHTML = `<div class="simgos-chatbot-message-avatar" aria-hidden="true"><i class="fa-solid fa-robot"></i></div><div><div class="simgos-chatbot-bubble"></div><div class="simgos-chatbot-message-meta">Chatbot · baru saja</div></div>`;
+            wrapper.querySelector('.simgos-chatbot-bubble').innerHTML = formatChatbotText(content);
         } else {
-            wrapper.innerHTML = `<div><div class="simgos-ai-bubble"></div><div class="simgos-ai-message-meta">Anda · baru saja</div></div>`;
-            wrapper.querySelector('.simgos-ai-bubble').textContent = content;
+            wrapper.innerHTML = `<div><div class="simgos-chatbot-bubble"></div><div class="simgos-chatbot-message-meta">Anda · baru saja</div></div>`;
+            wrapper.querySelector('.simgos-chatbot-bubble').textContent = content;
         }
         messages.appendChild(wrapper);
         scrollMessages();
@@ -64,15 +63,15 @@
     function addSuggestions(items) {
         if (!items || !items.length) return;
         const title = document.createElement('div');
-        title.className = 'simgos-ai-suggestion-title';
+        title.className = 'simgos-chatbot-suggestion-title';
         title.textContent = 'Pertanyaan lain';
         const container = document.createElement('div');
-        container.className = 'simgos-ai-suggestions';
+        container.className = 'simgos-chatbot-suggestions';
         items.forEach((item) => {
             const button = document.createElement('button');
             button.type = 'button';
-            button.className = 'simgos-ai-suggestion';
-            button.dataset.aiQuestion = item;
+            button.className = 'simgos-chatbot-suggestion';
+            button.dataset.chatbotQuestion = item;
             button.textContent = item;
             container.appendChild(button);
         });
@@ -81,9 +80,9 @@
 
     function addTyping() {
         const typing = document.createElement('div');
-        typing.className = 'simgos-ai-typing';
-        typing.dataset.aiTyping = 'true';
-        typing.innerHTML = '<div class="simgos-ai-message-avatar" aria-hidden="true"><i class="fa-solid fa-robot"></i></div><div><div class="simgos-ai-typing-bubble"><span></span><span></span><span></span></div><div class="simgos-ai-typing-label">AI Assistant sedang mengetik...</div></div>';
+        typing.className = 'simgos-chatbot-typing';
+        typing.dataset.chatbotTyping = 'true';
+        typing.innerHTML = '<div class="simgos-chatbot-message-avatar" aria-hidden="true"><i class="fa-solid fa-robot"></i></div><div><div class="simgos-chatbot-typing-bubble"><span></span><span></span><span></span></div><div class="simgos-chatbot-typing-label">Chatbot sedang mengetik...</div></div>';
         messages.appendChild(typing);
         scrollMessages();
         return typing;
@@ -95,11 +94,11 @@
         return element.innerHTML;
     }
 
-    function formatAiText(value) {
+    function formatChatbotText(value) {
         return escapeHtml(String(value || '')).replace(/\n/g, '<br>');
     }
 
-    async function sendToGemini(question) {
+    async function sendMessage(question) {
         const response = await fetch(endpoint, {
             method: 'POST',
             headers: {
@@ -109,7 +108,6 @@
             },
             body: JSON.stringify({
                 message: question,
-                history: conversationHistory.slice(-12),
             }),
         });
 
@@ -121,13 +119,8 @@
         }
 
         if (!response.ok || !result.ok) {
-            throw new Error(result.message || 'AI tidak dapat memberikan jawaban.');
+            throw new Error(result.message || 'Chatbot tidak dapat memberikan jawaban.');
         }
-
-        conversationHistory.push(
-            { role: 'user', content: question },
-            { role: 'assistant', content: result.answer }
-        );
 
         return result.answer;
     }
@@ -144,17 +137,17 @@
         const typing = addTyping();
 
         try {
-            const answer = await sendToGemini(cleanQuestion);
+            const answer = await sendMessage(cleanQuestion);
             typing.remove();
-            addMessage('ai', answer);
+            addMessage('chatbot', answer);
             addSuggestions([
                 'Lihat kunjungan per poli',
                 'Bandingkan dengan periode sebelumnya',
             ]);
         } catch (error) {
             typing.remove();
-            addMessage('ai', 'Maaf, AI sedang tidak dapat diakses. Silakan coba lagi.');
-            console.error('AI chat error:', error);
+            addMessage('chatbot', 'Maaf, Chatbot sedang tidak dapat diakses. Silakan coba lagi.');
+            console.error('Chatbot error:', error);
         } finally {
             isRequesting = false;
             sendButton.disabled = input.value.trim() === '';
@@ -168,8 +161,8 @@
     input.addEventListener('input', () => { sendButton.disabled = input.value.trim() === ''; });
     form.addEventListener('submit', (event) => { event.preventDefault(); submitQuestion(input.value); });
     widget.addEventListener('click', (event) => {
-        const questionButton = event.target.closest('[data-ai-question]');
-        if (questionButton) submitQuestion(questionButton.dataset.aiQuestion || questionButton.textContent);
+        const questionButton = event.target.closest('[data-chatbot-question]');
+        if (questionButton) submitQuestion(questionButton.dataset.chatbotQuestion || questionButton.textContent);
     });
     document.addEventListener('keydown', (event) => {
         if (event.key === 'Escape' && widget.classList.contains('is-open')) setOpen(false);

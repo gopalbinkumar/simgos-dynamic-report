@@ -1,15 +1,15 @@
-.simgos-ai {
-    --ai-primary: #027d78;
-    --ai-primary-hover: #016b67;
-    --ai-primary-dark: #005955;
-    --ai-primary-light: #ddf3f1;
-    --ai-background: #ffffff;
-    --ai-surface: #ffffff;
-    --ai-border: #e5e7eb;
-    --ai-text: #1f2937;
-    --ai-text-secondary: #6b7280;
-    --ai-text-muted: #9ca3af;
-    --ai-success: #16a34a;
+.simgos-chatbot {
+    --chatbot-primary: #027d78;
+    --chatbot-primary-hover: #016b67;
+    --chatbot-primary-dark: #005955;
+    --chatbot-primary-light: #ddf3f1;
+    --chatbot-background: #ffffff;
+    --chatbot-surface: #ffffff;
+    --chatbot-border: #e5e7eb;
+    --chatbot-text: #1f2937;
+    --chatbot-text-secondary: #6b7280;
+    --chatbot-text-muted: #9ca3af;
+    --chatbot-success: #16a34a;
     position: fixed;
     z-index: 80;
     right: 24px;
@@ -24,19 +24,19 @@
         sans-serif;
 }
 
-.simgos-ai *,
-.simgos-ai *::before,
-.simgos-ai *::after {
+.simgos-chatbot *,
+.simgos-chatbot *::before,
+.simgos-chatbot *::after {
     box-sizing: border-box;
 }
-.simgos-ai button,
-.simgos-ai input {
+.simgos-chatbot button,
+.simgos-chatbot input {
     font: inherit;
 }
-.simgos-ai button {
+.simgos-chatbot button {
     cursor: pointer;
 }
-.simgos-ai-fab {
+.simgos-chatbot-fab {
     position: relative;
     display: flex;
     width: 62px;
@@ -48,7 +48,7 @@
     color: #fff;
     border: 0;
     border-radius: 50%;
-    background: var(--ai-primary);
+    background: var(--chatbot-primary);
     box-shadow:
         0 12px 28px rgba(2, 125, 120, 0.28),
         0 3px 8px rgba(31, 41, 55, 0.12);
@@ -57,33 +57,33 @@
         background 0.2s ease,
         box-shadow 0.2s ease;
 }
-.simgos-ai-fab:hover,
-.simgos-ai-fab:focus-visible {
-    background: var(--ai-primary-hover);
+.simgos-chatbot-fab:hover,
+.simgos-chatbot-fab:focus-visible {
+    background: var(--chatbot-primary-hover);
     box-shadow:
         0 15px 32px rgba(2, 125, 120, 0.34),
         0 4px 10px rgba(31, 41, 55, 0.14);
     transform: translateY(-3px);
 }
-.simgos-ai-fab:focus-visible,
-.simgos-ai-icon-button:focus-visible,
-.simgos-ai-quick-button:focus-visible,
-.simgos-ai-chip:focus-visible,
-.simgos-ai-send:focus-visible {
+.simgos-chatbot-fab:focus-visible,
+.simgos-chatbot-icon-button:focus-visible,
+.simgos-chatbot-quick-button:focus-visible,
+.simgos-chatbot-chip:focus-visible,
+.simgos-chatbot-send:focus-visible {
     outline: 3px solid rgba(2, 125, 120, 0.24);
     outline-offset: 3px;
 }
-.simgos-ai-fab-sparkle {
+.simgos-chatbot-fab-sparkle {
     font-size: 25px;
 }
-.simgos-ai-fab-label {
+.simgos-chatbot-fab-label {
     margin-top: 18px;
     margin-left: -1px;
     font-size: 11px;
     font-weight: 800;
     letter-spacing: 0.02em;
 }
-.simgos-ai-tooltip {
+.simgos-chatbot-tooltip {
     position: absolute;
     right: 73px;
     top: 50%;
@@ -91,7 +91,7 @@
     padding: 7px 10px;
     color: #fff;
     border-radius: 6px;
-    background: var(--ai-text);
+    background: var(--chatbot-text);
     font-size: 11px;
     font-weight: 500;
     opacity: 0;
@@ -102,23 +102,23 @@
         transform 0.18s ease;
     white-space: nowrap;
 }
-.simgos-ai-tooltip::after {
+.simgos-chatbot-tooltip::after {
     position: absolute;
     top: 50%;
     right: -5px;
     width: 10px;
     height: 10px;
     content: "";
-    background: var(--ai-text);
+    background: var(--chatbot-text);
     transform: translateY(-50%) rotate(45deg);
 }
-.simgos-ai-fab:hover .simgos-ai-tooltip,
-.simgos-ai-fab:focus-visible .simgos-ai-tooltip {
+.simgos-chatbot-fab:hover .simgos-chatbot-tooltip,
+.simgos-chatbot-fab:focus-visible .simgos-chatbot-tooltip {
     opacity: 1;
     transform: translate(0, -50%);
 }
 
-.simgos-ai-panel {
+.simgos-chatbot-panel {
     position: absolute;
     right: 0;
     bottom: 0;
@@ -128,9 +128,9 @@
     flex-direction: column;
     overflow: hidden;
     overscroll-behavior: contain;
-    border: 1px solid var(--ai-border);
+    border: 1px solid var(--chatbot-border);
     border-radius: 16px;
-    background: var(--ai-background);
+    background: var(--chatbot-background);
     box-shadow:
         0 22px 55px rgba(31, 41, 55, 0.18),
         0 4px 12px rgba(31, 41, 55, 0.08);
@@ -142,88 +142,88 @@
         opacity 0.2s ease,
         transform 0.2s ease;
 }
-.simgos-ai.is-open .simgos-ai-panel {
+.simgos-chatbot.is-open .simgos-chatbot-panel {
     opacity: 1;
     pointer-events: auto;
     transform: translateY(0) scale(1);
 }
-.simgos-ai.is-open .simgos-ai-fab {
+.simgos-chatbot.is-open .simgos-chatbot-fab {
     opacity: 0;
     pointer-events: none;
     transform: scale(0.85);
 }
 
-.simgos-ai-header {
+.simgos-chatbot-header {
     display: flex;
     min-height: 74px;
     align-items: center;
     justify-content: space-between;
     padding: 14px 16px;
-    border-bottom: 1px solid var(--ai-border);
+    border-bottom: 1px solid var(--chatbot-border);
     background: #fbfdfd;
 }
-.simgos-ai-header-identity {
+.simgos-chatbot-header-identity {
     display: flex;
     align-items: center;
     gap: 10px;
 }
-.simgos-ai-header h2 {
+.simgos-chatbot-header h2 {
     margin: 0;
-    color: var(--ai-primary-dark);
+    color: var(--chatbot-primary-dark);
     font-size: 13px;
     font-weight: 750;
     letter-spacing: -0.01em;
 }
-.simgos-ai-status {
+.simgos-chatbot-status {
     display: flex;
     align-items: center;
     gap: 5px;
     margin-top: 3px;
-    color: var(--ai-text-secondary);
+    color: var(--chatbot-text-secondary);
     font-size: 10px;
 }
-.simgos-ai-status span {
+.simgos-chatbot-status span {
     width: 6px;
     height: 6px;
     border-radius: 50%;
-    background: var(--ai-success);
+    background: var(--chatbot-success);
     box-shadow: 0 0 0 3px #dcfce7;
 }
-.simgos-ai-avatar {
+.simgos-chatbot-avatar {
     display: flex;
     width: 34px;
     height: 34px;
     align-items: center;
     justify-content: center;
     flex: 0 0 auto;
-    color: var(--ai-primary);
+    color: var(--chatbot-primary);
     border: 1px solid #c6e7e4;
     border-radius: 10px;
-    background: var(--ai-primary-light);
+    background: var(--chatbot-primary-light);
     font-size: 14px;
 }
-.simgos-ai-header-actions {
+.simgos-chatbot-header-actions {
     display: flex;
     gap: 4px;
 }
-.simgos-ai-icon-button {
+.simgos-chatbot-icon-button {
     display: grid;
     width: 29px;
     height: 29px;
     place-items: center;
     padding: 0;
-    color: var(--ai-text-muted);
+    color: var(--chatbot-text-muted);
     border: 0;
     border-radius: 6px;
     background: transparent;
     font-size: 12px;
 }
-.simgos-ai-icon-button:hover {
-    color: var(--ai-primary-dark);
-    background: var(--ai-primary-light);
+.simgos-chatbot-icon-button:hover {
+    color: var(--chatbot-primary-dark);
+    background: var(--chatbot-primary-light);
 }
 
-.simgos-ai-messages {
+.simgos-chatbot-messages {
     display: flex;
     min-height: 0;
     flex: 1;
@@ -236,14 +236,14 @@
     scroll-behavior: smooth;
     -webkit-overflow-scrolling: touch;
 }
-.simgos-ai-messages::-webkit-scrollbar {
+.simgos-chatbot-messages::-webkit-scrollbar {
     width: 5px;
 }
-.simgos-ai-messages::-webkit-scrollbar-thumb {
+.simgos-chatbot-messages::-webkit-scrollbar-thumb {
     border-radius: 10px;
     background: #d9e3e3;
 }
-.simgos-ai-welcome {
+.simgos-chatbot-welcome {
     display: flex;
     min-height: 100%;
     flex-direction: column;
@@ -252,117 +252,117 @@
     padding: 22px 10px 30px;
     text-align: center;
 }
-.simgos-ai-welcome-icon {
+.simgos-chatbot-welcome-icon {
     display: flex;
     width: 58px;
     height: 58px;
     align-items: center;
     justify-content: center;
-    color: var(--ai-primary);
+    color: var(--chatbot-primary);
     border: 1px solid #bfe1de;
     border-radius: 17px;
-    background: var(--ai-primary-light);
+    background: var(--chatbot-primary-light);
     font-size: 23px;
 }
-.simgos-ai-welcome h3 {
+.simgos-chatbot-welcome h3 {
     margin: 14px 0 5px;
-    color: var(--ai-primary-dark);
+    color: var(--chatbot-primary-dark);
     font-size: 17px;
     font-weight: 750;
 }
-.simgos-ai-welcome p {
+.simgos-chatbot-welcome p {
     max-width: 270px;
     margin: 0;
-    color: var(--ai-text-secondary);
+    color: var(--chatbot-text-secondary);
     font-size: 11px;
     line-height: 1.6;
 }
-.simgos-ai-prompt-label {
+.simgos-chatbot-prompt-label {
     margin-top: 22px;
-    color: var(--ai-text-muted);
+    color: var(--chatbot-text-muted);
     font-size: 10px;
     font-weight: 600;
 }
-.simgos-ai-welcome-actions {
+.simgos-chatbot-welcome-actions {
     display: grid;
     width: 100%;
     gap: 7px;
     margin-top: 10px;
 }
-.simgos-ai-quick-button {
+.simgos-chatbot-quick-button {
     display: flex;
     min-height: 37px;
     align-items: center;
     gap: 9px;
     padding: 8px 11px;
-    color: var(--ai-text-secondary);
-    border: 1px solid var(--ai-border);
+    color: var(--chatbot-text-secondary);
+    border: 1px solid var(--chatbot-border);
     border-radius: 8px;
     background: #fff;
     font-size: 11px;
     text-align: left;
     transition: 0.18s ease;
 }
-.simgos-ai-quick-button i {
+.simgos-chatbot-quick-button i {
     width: 15px;
-    color: var(--ai-primary);
+    color: var(--chatbot-primary);
     text-align: center;
 }
-.simgos-ai-quick-button:hover {
-    color: var(--ai-primary-dark);
+.simgos-chatbot-quick-button:hover {
+    color: var(--chatbot-primary-dark);
     border-color: #abd8d4;
-    background: var(--ai-primary-light);
+    background: var(--chatbot-primary-light);
     transform: translateX(2px);
 }
-.simgos-ai-message {
+.simgos-chatbot-message {
     display: flex;
     align-items: flex-end;
     gap: 7px;
-    animation: simgosAiMessageIn 0.2s ease both;
+    animation: simgosChatbotMessageIn 0.2s ease both;
 }
-.simgos-ai-message.user {
+.simgos-chatbot-message.user {
     justify-content: flex-end;
 }
-.simgos-ai-message.user .simgos-ai-bubble {
-    color: var(--ai-primary-dark);
+.simgos-chatbot-message.user .simgos-chatbot-bubble {
+    color: var(--chatbot-primary-dark);
     border-color: #c5e7e4;
-    background: var(--ai-primary-light);
+    background: var(--chatbot-primary-light);
 }
-.simgos-ai-bubble {
+.simgos-chatbot-bubble {
     max-width: 80%;
     padding: 10px 12px;
-    color: var(--ai-text);
-    border: 1px solid var(--ai-border);
+    color: var(--chatbot-text);
+    border: 1px solid var(--chatbot-border);
     border-radius: 13px 13px 13px 4px;
     background: #f8fafb;
     font-size: 12px;
     line-height: 1.55;
 }
-.simgos-ai-message.user .simgos-ai-bubble {
+.simgos-chatbot-message.user .simgos-chatbot-bubble {
     border-radius: 13px 13px 4px 13px;
 }
-.simgos-ai-message-avatar {
+.simgos-chatbot-message-avatar {
     display: flex;
     width: 24px;
     height: 24px;
     align-items: center;
     justify-content: center;
     flex: 0 0 auto;
-    color: var(--ai-primary);
+    color: var(--chatbot-primary);
     border: 1px solid #cae7e5;
     border-radius: 8px;
-    background: var(--ai-primary-light);
+    background: var(--chatbot-primary-light);
     font-size: 10px;
 }
-.simgos-ai-message-meta {
+.simgos-chatbot-message-meta {
     margin-top: 4px;
-    color: var(--ai-text-muted);
+    color: var(--chatbot-text-muted);
     font-size: 9px;
 }
-.simgos-ai-message.user .simgos-ai-message-meta {
+.simgos-chatbot-message.user .simgos-chatbot-message-meta {
     text-align: right;
 }
-.simgos-ai-insight {
+.simgos-chatbot-insight {
     max-width: 83%;
     margin-left: 31px;
     padding: 11px 12px;
@@ -370,143 +370,143 @@
     border-radius: 10px;
     background: #fbfefe;
     box-shadow: 0 2px 8px rgba(2, 125, 120, 0.04);
-    animation: simgosAiMessageIn 0.25s ease both;
+    animation: simgosChatbotMessageIn 0.25s ease both;
 }
-.simgos-ai-insight-label {
-    color: var(--ai-text-secondary);
+.simgos-chatbot-insight-label {
+    color: var(--chatbot-text-secondary);
     font-size: 10px;
 }
-.simgos-ai-insight-value {
+.simgos-chatbot-insight-value {
     margin-top: 2px;
-    color: var(--ai-primary-dark);
+    color: var(--chatbot-primary-dark);
     font-size: 20px;
     font-weight: 800;
     letter-spacing: -0.04em;
 }
-.simgos-ai-insight-change {
+.simgos-chatbot-insight-change {
     margin-top: 2px;
-    color: var(--ai-success);
+    color: var(--chatbot-success);
     font-size: 10px;
     font-weight: 600;
 }
-.simgos-ai-insight-change i {
+.simgos-chatbot-insight-change i {
     margin-right: 3px;
 }
-.simgos-ai-suggestion-title {
+.simgos-chatbot-suggestion-title {
     margin: 1px 0 -6px 31px;
-    color: var(--ai-text-muted);
+    color: var(--chatbot-text-muted);
     font-size: 10px;
 }
-.simgos-ai-suggestions {
+.simgos-chatbot-suggestions {
     display: flex;
     flex-wrap: wrap;
     gap: 6px;
     margin-left: 31px;
 }
-.simgos-ai-suggestion {
+.simgos-chatbot-suggestion {
     padding: 6px 9px;
-    color: var(--ai-primary-dark);
+    color: var(--chatbot-primary-dark);
     border: 1px solid #c5e7e4;
     border-radius: 999px;
     background: #fff;
     font-size: 10px;
 }
-.simgos-ai-suggestion:hover {
-    background: var(--ai-primary-light);
+.simgos-chatbot-suggestion:hover {
+    background: var(--chatbot-primary-light);
 }
-.simgos-ai-typing {
+.simgos-chatbot-typing {
     display: flex;
     align-items: center;
     gap: 7px;
 }
-.simgos-ai-typing-bubble {
+.simgos-chatbot-typing-bubble {
     display: flex;
     align-items: center;
     gap: 4px;
     padding: 10px 12px;
-    border: 1px solid var(--ai-border);
+    border: 1px solid var(--chatbot-border);
     border-radius: 13px 13px 13px 4px;
     background: #f8fafb;
 }
-.simgos-ai-typing-bubble span {
+.simgos-chatbot-typing-bubble span {
     width: 5px;
     height: 5px;
     border-radius: 50%;
-    background: var(--ai-primary);
-    animation: simgosAiDot 1.15s infinite ease-in-out;
+    background: var(--chatbot-primary);
+    animation: simgosChatbotDot 1.15s infinite ease-in-out;
 }
-.simgos-ai-typing-bubble span:nth-child(2) {
+.simgos-chatbot-typing-bubble span:nth-child(2) {
     animation-delay: 0.15s;
 }
-.simgos-ai-typing-bubble span:nth-child(3) {
+.simgos-chatbot-typing-bubble span:nth-child(3) {
     animation-delay: 0.3s;
 }
-.simgos-ai-typing-label {
-    color: var(--ai-text-muted);
+.simgos-chatbot-typing-label {
+    color: var(--chatbot-text-muted);
     font-size: 9px;
 }
 
-.simgos-ai-composer-area {
+.simgos-chatbot-composer-area {
     padding: 10px 13px 11px;
-    border-top: 1px solid var(--ai-border);
+    border-top: 1px solid var(--chatbot-border);
     background: #fff;
 }
-.simgos-ai-quick-strip {
+.simgos-chatbot-quick-strip {
     display: flex;
     gap: 6px;
     overflow-x: auto;
     padding: 0 0 9px;
     scrollbar-width: none;
 }
-.simgos-ai-quick-strip::-webkit-scrollbar {
+.simgos-chatbot-quick-strip::-webkit-scrollbar {
     display: none;
 }
-.simgos-ai-chip {
+.simgos-chatbot-chip {
     flex: 0 0 auto;
     padding: 6px 9px;
-    color: var(--ai-text-secondary);
-    border: 1px solid var(--ai-border);
+    color: var(--chatbot-text-secondary);
+    border: 1px solid var(--chatbot-border);
     border-radius: 999px;
     background: #fff;
     font-size: 10px;
     white-space: nowrap;
 }
-.simgos-ai-chip:hover {
-    color: var(--ai-primary-dark);
+.simgos-chatbot-chip:hover {
+    color: var(--chatbot-primary-dark);
     border-color: #a9d8d4;
-    background: var(--ai-primary-light);
+    background: var(--chatbot-primary-light);
 }
-.simgos-ai-composer {
+.simgos-chatbot-composer {
     display: flex;
     align-items: center;
     gap: 7px;
     padding: 4px 5px 4px 13px;
-    border: 1px solid var(--ai-border);
+    border: 1px solid var(--chatbot-border);
     border-radius: 10px;
     background: #fff;
     transition:
         border-color 0.18s ease,
         box-shadow 0.18s ease;
 }
-.simgos-ai-composer:focus-within {
-    border-color: var(--ai-primary);
+.simgos-chatbot-composer:focus-within {
+    border-color: var(--chatbot-primary);
     box-shadow: 0 0 0 3px rgba(2, 125, 120, 0.1);
 }
-.simgos-ai-composer input {
+.simgos-chatbot-composer input {
     min-width: 0;
     height: 36px;
     flex: 1;
     padding: 0;
-    color: var(--ai-text);
+    color: var(--chatbot-text);
     border: 0;
     outline: 0;
     background: transparent;
     font-size: 12px;
 }
-.simgos-ai-composer input::placeholder {
-    color: var(--ai-text-muted);
+.simgos-chatbot-composer input::placeholder {
+    color: var(--chatbot-text-muted);
 }
-.simgos-ai-send {
+.simgos-chatbot-send {
     display: grid;
     width: 34px;
     height: 34px;
@@ -515,28 +515,28 @@
     color: #fff;
     border: 0;
     border-radius: 8px;
-    background: var(--ai-primary);
+    background: var(--chatbot-primary);
     font-size: 12px;
     transition: 0.18s ease;
 }
-.simgos-ai-send:hover:not(:disabled) {
-    background: var(--ai-primary-hover);
+.simgos-chatbot-send:hover:not(:disabled) {
+    background: var(--chatbot-primary-hover);
     transform: translateY(-1px);
 }
-.simgos-ai-send:disabled {
+.simgos-chatbot-send:disabled {
     cursor: not-allowed;
     opacity: 0.42;
 }
-.simgos-ai-disclaimer {
+.simgos-chatbot-disclaimer {
     margin-top: 7px;
-    color: var(--ai-text-muted);
+    color: var(--chatbot-text-muted);
     font-size: 9px;
     text-align: center;
 }
-.simgos-ai-disclaimer i {
+.simgos-chatbot-disclaimer i {
     margin-right: 3px;
 }
-.simgos-ai-sr-only {
+.simgos-chatbot-sr-only {
     position: absolute;
     width: 1px;
     height: 1px;
@@ -546,7 +546,7 @@
     white-space: nowrap;
     border: 0;
 }
-@keyframes simgosAiMessageIn {
+@keyframes simgosChatbotMessageIn {
     from {
         opacity: 0;
         transform: translateY(5px);
@@ -556,7 +556,7 @@
         transform: translateY(0);
     }
 }
-@keyframes simgosAiDot {
+@keyframes simgosChatbotDot {
     0%,
     70%,
     100% {
@@ -569,19 +569,19 @@
     }
 }
 @media (prefers-reduced-motion: reduce) {
-    .simgos-ai *,
-    .simgos-ai *::before,
-    .simgos-ai *::after {
+    .simgos-chatbot *,
+    .simgos-chatbot *::before,
+    .simgos-chatbot *::after {
         animation-duration: 0.01ms !important;
         transition-duration: 0.01ms !important;
     }
 }
 @media (max-width: 640px) {
-    .simgos-ai {
+    .simgos-chatbot {
         right: 12px;
         bottom: 12px;
     }
-    .simgos-ai-panel {
+    .simgos-chatbot-panel {
         right: 0;
         bottom: 0;
         width: calc(100vw - 24px);
@@ -589,7 +589,7 @@
         max-height: 680px;
         border-radius: 14px;
     }
-    .simgos-ai-fab {
+    .simgos-chatbot-fab {
         width: 58px;
         height: 58px;
     }

@@ -7,17 +7,7 @@ use App\Http\Controllers\MasterDataController;
 use App\Http\Controllers\ReportingController;
 use App\Http\Controllers\SystemController;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\AiChatController;
-/*
-|--------------------------------------------------------------------------
-| Web Routes
-|--------------------------------------------------------------------------
-|
-| Here is where you can register web routes for your application. These
-| routes are loaded by the RouteServiceProvider and all of them will
-| be assigned to the "web" middleware group. Make something great!
-|
-*/
+use App\Http\Controllers\ChatbotController;
 
 Route::get('/', [DashboardController::class, 'index'])->name('dashboard');
 Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard.overview');
@@ -41,7 +31,7 @@ Route::get('/report-history', [ReportingController::class, 'history'])->name('re
 Route::get('/database-status', [SystemController::class, 'databaseStatus'])->name('system.database-status');
 Route::get('/about', [SystemController::class, 'about'])->name('system.about');
 
-Route::post('/ai/chat', AiChatController::class)
+Route::post('/chatbot', ChatbotController::class)
     ->middleware('throttle:20,1')
-    ->name('ai.chat');
+    ->name('chatbot.send');
 

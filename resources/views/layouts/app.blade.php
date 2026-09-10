@@ -22,7 +22,7 @@
         })();
     </script>
     <link rel="stylesheet" href="{{ asset('css/app.css') }}">
-    <link rel="stylesheet" href="{{ asset('css/ai-chat.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/chatbot.css') }}">
     @stack('head')
 </head>
 
@@ -71,11 +71,11 @@
     </div>
 
     <div class="sidebar-overlay" data-sidebar-overlay></div>
-    @include('components.ai-chat-widget')
+    @include('components.chatbot-widget')
     <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.4/dist/chart.umd.min.js"></script>
     @stack('scripts')
     <script src="{{ asset('js/app.js') }}"></script>
-    <script src="{{ asset('js/ai-chat.js') }}"></script>
+    <script src="{{ asset('js/chatbot.js') }}"></script>
 </body>
 
 </html>

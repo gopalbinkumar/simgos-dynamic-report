@@ -10,7 +10,6 @@
             <h1>Dynamic Report</h1>
             <p>Susun laporan sesuai kebutuhan dari sumber data SIMRS SIMGOS.</p>
         </div>
-        <div class="page-header-status"><span class="status-dot"></span> Read-only query</div>
     </div>
 
     <form action="{{ route('reports.dynamic.run') }}" method="POST" class="report-builder">
