@@ -12,9 +12,13 @@
     const input = widget.querySelector('[data-chatbot-input]');
     const sendButton = widget.querySelector('[data-chatbot-send]');
     const messages = widget.querySelector('[data-chatbot-messages]');
+    const quickStrip = widget.querySelector('[data-chatbot-quick-strip]');
     const welcome = widget.querySelector('[data-chatbot-welcome]');
     const endpoint = widget.dataset.chatbotEndpoint || '/chatbot';
     const csrfToken = document.querySelector('meta[name="csrf-token"]')?.content || '';
+    const historyStorageKey = 'simgos-chatbot-history-v1';
+    const maxHistoryMessages = 100;
+    let conversation = loadHistory();
     let isRequesting = false;
 
     function setOpen(isOpen) {
@@ -28,12 +32,23 @@
     // Keep scrolling inside the widget from chaining to the main page.
     panel.addEventListener('wheel', (event) => {
         event.stopPropagation();
-        if (!messages.contains(event.target)) event.preventDefault();
+        if (!messages.contains(event.target) && !quickStrip?.contains(event.target)) {
+            event.preventDefault();
+        }
     }, { passive: false });
 
     messages.addEventListener('wheel', (event) => {
         event.stopPropagation();
     }, { passive: true });
+
+    // Mouse wheel vertikal pada quick questions digeser menjadi scroll horizontal.
+    quickStrip?.addEventListener('wheel', (event) => {
+        if (Math.abs(event.deltaY) > Math.abs(event.deltaX)) {
+            quickStrip.scrollLeft += event.deltaY;
+            event.preventDefault();
+        }
+        event.stopPropagation();
+    }, { passive: false });
 
     // Clicking outside an open widget closes it.
     document.addEventListener('pointerdown', (event) => {
@@ -46,36 +61,63 @@
         messages.scrollTop = messages.scrollHeight;
     }
 
-    function addMessage(type, content) {
+    function loadHistory() {
+        try {
+            const stored = JSON.parse(window.localStorage.getItem(historyStorageKey) || '[]');
+
+            if (!Array.isArray(stored)) return [];
+
+            return stored
+                .filter((item) => item
+                    && (item.role === 'user' || item.role === 'chatbot')
+                    && typeof item.content === 'string'
+                    && item.content.trim() !== '')
+                .slice(-maxHistoryMessages);
+        } catch (error) {
+            // Storage may be disabled in private browsing or by browser policy.
+            return [];
+        }
+    }
+
+    function saveHistory() {
+        try {
+            window.localStorage.setItem(
+                historyStorageKey,
+                JSON.stringify(conversation.slice(-maxHistoryMessages))
+            );
+        } catch (error) {
+            // The chatbot should continue working even when storage is unavailable.
+        }
+    }
+
+    function addMessage(type, content, persist = true) {
+        const messageContent = String(content || '');
         const wrapper = document.createElement('div');
         wrapper.className = `simgos-chatbot-message ${type}`;
         if (type === 'chatbot') {
             wrapper.innerHTML = `<div class="simgos-chatbot-message-avatar" aria-hidden="true"><i class="fa-solid fa-robot"></i></div><div><div class="simgos-chatbot-bubble"></div><div class="simgos-chatbot-message-meta">Chatbot · baru saja</div></div>`;
-            wrapper.querySelector('.simgos-chatbot-bubble').innerHTML = formatChatbotText(content);
+            wrapper.querySelector('.simgos-chatbot-bubble').innerHTML = formatChatbotText(messageContent);
         } else {
             wrapper.innerHTML = `<div><div class="simgos-chatbot-bubble"></div><div class="simgos-chatbot-message-meta">Anda · baru saja</div></div>`;
-            wrapper.querySelector('.simgos-chatbot-bubble').textContent = content;
+            wrapper.querySelector('.simgos-chatbot-bubble').textContent = messageContent;
         }
         messages.appendChild(wrapper);
+
+        if (persist) {
+            conversation.push({ role: type, content: messageContent });
+            conversation = conversation.slice(-maxHistoryMessages);
+            saveHistory();
+        }
+
         scrollMessages();
     }
 
-    function addSuggestions(items) {
-        if (!items || !items.length) return;
-        const title = document.createElement('div');
-        title.className = 'simgos-chatbot-suggestion-title';
-        title.textContent = 'Pertanyaan lain';
-        const container = document.createElement('div');
-        container.className = 'simgos-chatbot-suggestions';
-        items.forEach((item) => {
-            const button = document.createElement('button');
-            button.type = 'button';
-            button.className = 'simgos-chatbot-suggestion';
-            button.dataset.chatbotQuestion = item;
-            button.textContent = item;
-            container.appendChild(button);
-        });
-        messages.append(title, container);
+    function restoreHistory() {
+        if (conversation.length === 0) return;
+
+        welcome?.remove();
+        conversation.forEach((item) => addMessage(item.role, item.content, false));
+        scrollMessages();
     }
 
     function addTyping() {
@@ -97,6 +139,8 @@
     function formatChatbotText(value) {
         return escapeHtml(String(value || '')).replace(/\n/g, '<br>');
     }
+
+    restoreHistory();
 
     async function sendMessage(question) {
         const response = await fetch(endpoint, {
@@ -140,10 +184,6 @@
             const answer = await sendMessage(cleanQuestion);
             typing.remove();
             addMessage('chatbot', answer);
-            addSuggestions([
-                'Lihat kunjungan per poli',
-                'Bandingkan dengan periode sebelumnya',
-            ]);
         } catch (error) {
             typing.remove();
             addMessage('chatbot', 'Maaf, Chatbot sedang tidak dapat diakses. Silakan coba lagi.');

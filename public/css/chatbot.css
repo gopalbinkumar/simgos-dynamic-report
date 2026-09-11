@@ -447,16 +447,25 @@
 }
 
 .simgos-chatbot-composer-area {
+    min-width: 0;
     padding: 10px 13px 11px;
     border-top: 1px solid var(--chatbot-border);
     background: #fff;
 }
 .simgos-chatbot-quick-strip {
     display: flex;
+    width: 100%;
+    min-width: 0;
+    max-width: 100%;
     gap: 6px;
     overflow-x: auto;
+    overflow-y: hidden;
     padding: 0 0 9px;
+    touch-action: pan-x;
+    overscroll-behavior-x: contain;
+    white-space: nowrap;
     scrollbar-width: none;
+    -webkit-overflow-scrolling: touch;
 }
 .simgos-chatbot-quick-strip::-webkit-scrollbar {
     display: none;
@@ -518,6 +527,7 @@
     background: var(--chatbot-primary);
     font-size: 12px;
     transition: 0.18s ease;
+    padding-right: 10px;
 }
 .simgos-chatbot-send:hover:not(:disabled) {
     background: var(--chatbot-primary-hover);

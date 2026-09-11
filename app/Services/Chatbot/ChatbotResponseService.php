@@ -34,11 +34,27 @@ class ChatbotResponseService
     private function visits(string $prefix, array $data, string $question): string
     {
         if (!empty($data['requested_unit'])) {
+            $paymentLabel = !empty($data['requested_payment'])
+                ? ' dengan cara bayar ' . $data['requested_payment']
+                : '';
             $answer = $prefix . 'jumlah kunjungan ' . $data['requested_unit']
+                . $paymentLabel . ' adalah ' . $this->number($data['total_kunjungan'] ?? 0) . '.';
+
+            if (($data['total_kunjungan'] ?? 0) == 0) {
+                $answer = $prefix . 'tidak tercatat kunjungan untuk ' . $data['requested_unit']
+                    . $paymentLabel . '.';
+            }
+
+            return $answer;
+        }
+
+        if (!empty($data['requested_payment'])) {
+            $answer = $prefix . 'jumlah pasien dengan cara bayar ' . $data['requested_payment']
                 . ' adalah ' . $this->number($data['total_kunjungan'] ?? 0) . '.';
 
             if (($data['total_kunjungan'] ?? 0) == 0) {
-                $answer = $prefix . 'tidak tercatat kunjungan untuk ' . $data['requested_unit'] . '.';
+                $answer = $prefix . 'tidak tercatat pasien dengan cara bayar '
+                    . $data['requested_payment'] . '.';
             }
 
             return $answer;

@@ -1,5 +1,6 @@
 <div class="simgos-chatbot" data-chatbot-widget data-chatbot-endpoint="{{ route('chatbot.send') }}">
-    <button type="button" class="simgos-chatbot-fab" data-chatbot-open aria-label="Buka SIMGOS Chatbot" aria-expanded="false">
+    <button type="button" class="simgos-chatbot-fab" data-chatbot-open aria-label="Buka SIMGOS Chatbot"
+        aria-expanded="false">
         <span class="simgos-chatbot-fab-sparkle" aria-hidden="true"><i class="fa-regular fa-comment"></i></span>
         <span class="simgos-chatbot-tooltip" role="tooltip">Tanya Chatbot</span>
     </button>
@@ -12,7 +13,7 @@
                 <div>
                     <h2>Chatbot</h2>
                     <span class="simgos-chatbot-status"><span></span> Online</span>
-                </div>Hk
+                </div>
             </div>
             <div class="simgos-chatbot-header-actions">
                 <button type="button" class="simgos-chatbot-icon-button" data-chatbot-minimize
@@ -30,10 +31,12 @@
                 <span class="simgos-chatbot-prompt-label">Apa yang ingin Anda ketahui?</span>
                 <div class="simgos-chatbot-welcome-actions">
                     <button type="button" class="simgos-chatbot-quick-button"
-                        data-chatbot-question="Berapa jumlah kunjungan bulan ini?"><i class="fa-solid fa-chart-column"></i>
+                        data-chatbot-question="Berapa jumlah kunjungan bulan ini?"><i
+                            class="fa-solid fa-chart-column"></i>
                         Ringkasan kunjungan</button>
                     <button type="button" class="simgos-chatbot-quick-button"
-                        data-chatbot-question="Poli mana yang paling banyak dikunjungi?"><i class="fa-solid fa-hospital"></i>
+                        data-chatbot-question="Poli mana yang paling banyak dikunjungi?"><i
+                            class="fa-solid fa-hospital"></i>
                         Kunjungan per poli</button>
                     <button type="button" class="simgos-chatbot-quick-button"
                         data-chatbot-question="Berikan ringkasan indikator rumah sakit."><i
@@ -47,23 +50,27 @@
 
         <div class="simgos-chatbot-composer-area">
             <div class="simgos-chatbot-quick-strip" data-chatbot-quick-strip aria-label="Pertanyaan cepat">
-                <button type="button" class="simgos-chatbot-chip" data-chatbot-question="Berapa kunjungan hari ini?">Kunjungan
+                <button type="button" class="simgos-chatbot-chip"
+                    data-chatbot-question="Berapa kunjungan hari ini?">Kunjungan
                     hari ini</button>
-                <button type="button" class="simgos-chatbot-chip" data-chatbot-question="Poli mana yang paling ramai?">Poli
+                <button type="button" class="simgos-chatbot-chip"
+                    data-chatbot-question="Poli mana yang paling ramai?">Poli
                     teramai</button>
-                <button type="button" class="simgos-chatbot-chip" data-chatbot-question="Bagaimana tren bulan ini?">Tren bulan
+                <button type="button" class="simgos-chatbot-chip"
+                    data-chatbot-question="Bagaimana tren bulan ini?">Tren bulan
                     ini</button>
-                <button type="button" class="simgos-chatbot-chip" data-chatbot-question="Berikan ringkasan pendapatan bulan ini.">Ringkasan
+                <button type="button" class="simgos-chatbot-chip"
+                    data-chatbot-question="Berikan ringkasan pendapatan bulan ini.">Ringkasan
                     keuangan</button>
             </div>
             <form class="simgos-chatbot-composer" data-chatbot-form novalidate>
-                <label class="simgos-chatbot-sr-only" for="simgos-chatbot-input">Tulis pertanyaan untuk SIMGOS Chatbot</label>
+                <label class="simgos-chatbot-sr-only" for="simgos-chatbot-input">Tulis pertanyaan untuk SIMGOS
+                    Chatbot</label>
                 <input id="simgos-chatbot-input" type="text" data-chatbot-input autocomplete="off"
                     placeholder="Tulis pertanyaan..." maxlength="500">
-                <button type="submit" class="simgos-chatbot-send" data-chatbot-send aria-label="Kirim pertanyaan" disabled><i
-                        class="fa-solid fa-arrow-up"></i></button>
+                <button type="submit" class="simgos-chatbot-send" data-chatbot-send aria-label="Kirim pertanyaan"
+                    disabled><i class="fa-solid fa-paper-plane fa-rotate-by fa-width-auto" style="--fa-rotate-angle: 45deg;"></i></button>
             </form>
-            <div class="simgos-chatbot-disclaimer"><i class="fa-solid fa-shield-halved"></i> Respons berbasis data melalui server aplikasi</div>
         </div>
     </section>
 </div>

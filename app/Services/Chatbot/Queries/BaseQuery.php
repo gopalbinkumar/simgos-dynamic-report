@@ -42,6 +42,25 @@ abstract class BaseQuery
             });
         }
 
+        if (filled($period['payment'] ?? null)) {
+            $payment = $period['payment'];
+            $paymentColumns = ['CARABAYAR', 'CARA_BAYAR', 'JENIS_BAYAR', 'PENJAMIN'];
+            $availablePaymentColumns = collect($paymentColumns)
+                ->filter(fn(string $column): bool => in_array($column, $columns, true));
+
+            if ($availablePaymentColumns->isNotEmpty()) {
+                $query->where(function (Builder $builder) use ($payment, $availablePaymentColumns): void {
+                    foreach ($availablePaymentColumns as $column) {
+                        $builder->orWhere($column, $payment);
+                    }
+                });
+            } else {
+                // Jangan mengklaim data terfilter jika tabel sumber tidak memiliki
+                // kolom metode pembayaran yang dapat digunakan.
+                $query->whereRaw('1 = 0');
+            }
+        }
+
         return $query;
     }
 

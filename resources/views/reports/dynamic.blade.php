@@ -38,11 +38,13 @@
                 </div><span class="step-number">02</span>
             </div>
             <div class="checkbox-grid">
-                @foreach ($availableColumns as $key => $label)
+                @forelse ($availableColumns as $key => $label)
                     <label class="check-card"><input type="checkbox" name="selected_columns[]" value="{{ $key }}"
                             @checked(in_array($key, $state['selected_columns'], true))><span class="custom-check"><i
                                 class="fa-solid fa-check"></i></span><span>{{ $label }}</span></label>
-                @endforeach
+                @empty
+                    <div class="empty-state"><i class="fa-solid fa-database"></i><strong>Kolom belum tersedia</strong><span>Sumber data belum dapat dibaca dari database SIMGOS.</span></div>
+                @endforelse
             </div>
         </div>
 
@@ -57,9 +59,9 @@
                 @foreach ($state['filters'] as $index => $filter)
                     <div class="filter-row" data-filter-row>
                         <label class="field"><span>Field</span><select name="filters[{{ $index }}][field]">
-                                <option value="category" @selected(($filter['field'] ?? '') === 'category')>Kategori</option>
-                                <option value="tanggal" @selected(($filter['field'] ?? '') === 'tanggal')>Tanggal</option>
-                                <option value="status" @selected(($filter['field'] ?? '') === 'status')>Status</option>
+                                @foreach ($availableColumns as $key => $label)
+                                    <option value="{{ $key }}" @selected(($filter['field'] ?? '') === $key)>{{ $label }}</option>
+                                @endforeach
                             </select></label>
                         <label class="field"><span>Operator</span><select name="filters[{{ $index }}][operator]">
                                 <option value="=" @selected(($filter['operator'] ?? '') === '=')>Sama Dengan</option>
@@ -88,9 +90,9 @@
             </div>
             <div class="form-grid-3">
                 <label class="field"><span>Kolom</span><select name="sort_column">
-                        <option value="tanggal" @selected($state['sort_column'] === 'tanggal')>Tanggal</option>
-                        <option value="id" @selected($state['sort_column'] === 'id')>ID</option>
-                        <option value="category" @selected($state['sort_column'] === 'category')>Kategori</option>
+                        @foreach ($availableColumns as $key => $label)
+                            <option value="{{ $key }}" @selected($state['sort_column'] === $key)>{{ $label }}</option>
+                        @endforeach
                     </select></label>
                 <label class="field"><span>Urutan</span><select name="sort_direction">
                         <option value="desc" @selected($state['sort_direction'] === 'desc')>Terbaru → Terlama</option>
@@ -98,8 +100,9 @@
                     </select></label>
                 <label class="field"><span>Group By</span><select name="group_by">
                         <option value="none" @selected($state['group_by'] === 'none')>Tidak Ada</option>
-                        <option value="category" @selected($state['group_by'] === 'category')>Kategori</option>
-                        <option value="tanggal" @selected($state['group_by'] === 'tanggal')>Tanggal</option>
+                        @foreach ($availableColumns as $key => $label)
+                            <option value="{{ $key }}" @selected($state['group_by'] === $key)>{{ $label }}</option>
+                        @endforeach
                     </select></label>
             </div>
         </div>
@@ -118,15 +121,20 @@
                     <h2>Hasil Report</h2>
                     <p>{{ $rows->total() }} baris tersedia. Kolom tabel mengikuti pilihan pada builder.</p>
                 </div>
-                <div class="table-actions"><a href="{{ route('reports.dynamic.export') }}" class="button button-outline"><i
-                            class="fa-solid fa-file-csv"></i> Export Excel</a><button type="button"
+                <div class="table-actions"><a href="{{ route('reports.dynamic.export', ['search' => $search]) }}" class="button button-outline"><i
+                            class="fa-solid fa-file-excel"></i> Export Excel</a><button type="button"
                         class="button button-outline" onclick="window.print()"><i class="fa-solid fa-file-pdf"></i> Export
                         PDF</button></div>
             </div>
-            <div class="table-toolbar"><label class="search-field"><i class="fa-solid fa-magnifying-glass"></i><input
-                        type="search" data-table-search placeholder="Cari di hasil report..."></label><button
-                    class="button button-light" type="button" data-toggle-columns><i
-                        class="fa-solid fa-table-columns"></i> Column toggle</button></div>
+            <div class="table-toolbar">
+                <form method="GET" action="{{ route('reports.dynamic') }}" class="search-field">
+                    <input type="hidden" name="report" value="1">
+                    <i class="fa-solid fa-magnifying-glass"></i>
+                    <input type="search" name="search" value="{{ $search }}" placeholder="Cari di hasil report..." aria-label="Cari di hasil report">
+                </form>
+                <button class="button button-light" type="button" data-toggle-columns><i
+                    class="fa-solid fa-table-columns"></i> Column toggle</button>
+            </div>
             <div class="column-toggle-panel" data-column-toggle-panel>
                 @foreach ($state['selected_columns'] as $column)
                     <label><input type="checkbox" checked data-column-toggle="{{ $loop->index }}">
@@ -147,9 +155,9 @@
                             <tr>
                                 @foreach ($state['selected_columns'] as $column)
                                     <td>
-                                        @if ($column === 'status')
+                                        @if ($column === 'STATUS')
                                             <span
-                                                class="badge badge-neutral">{{ $row[$column] ?? '-' }}</span>@else{{ $row[$column] ?? '-' }}
+                                                class="badge badge-neutral">{{ $row->{$column} ?? '-' }}</span>@else{{ $row->{$column} ?? '-' }}
                                         @endif
                                     </td>
                                 @endforeach
@@ -175,11 +183,19 @@
             const repeater = document.querySelector('[data-filter-repeater]');
             const addButton = document.querySelector('[data-add-filter]');
             const resetFilters = document.querySelector('[data-reset-filters]');
+            const columnOptions = @json($availableColumns);
+            const defaultFilterField = @json($defaultFilterField);
+
+            const fieldOptions = (selected = defaultFilterField) => Object.entries(columnOptions)
+                .map(([key, label]) => `<option value="${key}" ${key === selected ? 'selected' : ''}>${label}</option>`)
+                .join('');
+
+            const filterRowTemplate = (index, selectedField = defaultFilterField) =>
+                `<div class="filter-row" data-filter-row><label class="field"><span>Field</span><select name="filters[${index}][field]">${fieldOptions(selectedField)}</select></label><label class="field"><span>Operator</span><select name="filters[${index}][operator]"><option value="=">Sama Dengan</option><option value=">=">Lebih Besar / Sama Dengan</option><option value="<=">Lebih Kecil / Sama Dengan</option><option value="contains">Mengandung</option></select></label><label class="field"><span>Value</span><input type="text" name="filters[${index}][value]" placeholder="Masukkan nilai"></label><button type="button" class="icon-button remove-filter" data-remove-filter aria-label="Hapus filter"><i class="fa-solid fa-trash-can"></i></button></div>`;
+
             if (repeater && addButton) {
-                const rowTemplate = (index) =>
-                    `<div class="filter-row" data-filter-row><label class="field"><span>Field</span><select name="filters[${index}][field]"><option value="category">Kategori</option><option value="tanggal">Tanggal</option><option value="status">Status</option></select></label><label class="field"><span>Operator</span><select name="filters[${index}][operator]"><option value="=">Sama Dengan</option><option value=">=">Lebih Besar / Sama Dengan</option><option value="<=">Lebih Kecil / Sama Dengan</option><option value="contains">Mengandung</option></select></label><label class="field"><span>Value</span><input type="text" name="filters[${index}][value]" placeholder="Semua"></label><button type="button" class="icon-button remove-filter" data-remove-filter aria-label="Hapus filter"><i class="fa-solid fa-trash-can"></i></button></div>`;
                 addButton.addEventListener('click', () => {
-                    repeater.insertAdjacentHTML('beforeend', rowTemplate(repeater.querySelectorAll(
+                    repeater.insertAdjacentHTML('beforeend', filterRowTemplate(repeater.querySelectorAll(
                         '[data-filter-row]').length));
                 });
                 repeater.addEventListener('click', (event) => {
@@ -189,16 +205,9 @@
                 });
             }
             if (resetFilters && repeater) resetFilters.addEventListener('click', () => {
-                repeater.innerHTML =
-                    `<div class="filter-row" data-filter-row><label class="field"><span>Field</span><select name="filters[0][field]"><option value="category">Kategori</option><option value="tanggal">Tanggal</option><option value="status">Status</option></select></label><label class="field"><span>Operator</span><select name="filters[0][operator]"><option value="=">Sama Dengan</option><option value=">=">Lebih Besar / Sama Dengan</option><option value="<=">Lebih Kecil / Sama Dengan</option><option value="contains">Mengandung</option></select></label><label class="field"><span>Value</span><input type="text" name="filters[0][value]" placeholder="Semua"></label><button type="button" class="icon-button remove-filter" data-remove-filter aria-label="Hapus filter"><i class="fa-solid fa-trash-can"></i></button></div>`;
+                repeater.innerHTML = filterRowTemplate(0);
             });
             const table = document.querySelector('[data-report-table]');
-            const search = document.querySelector('[data-table-search]');
-            if (table && search) search.addEventListener('input', () => {
-                const needle = search.value.toLowerCase();
-                table.querySelectorAll('tbody tr').forEach(row => row.style.display = row.innerText
-                .toLowerCase().includes(needle) ? '' : 'none');
-            });
             const togglePanel = document.querySelector('[data-column-toggle-panel]');
             document.querySelector('[data-toggle-columns]')?.addEventListener('click', () => togglePanel?.classList
                 .toggle('open'));

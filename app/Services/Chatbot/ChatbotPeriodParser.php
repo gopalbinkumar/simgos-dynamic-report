@@ -100,6 +100,7 @@ class ChatbotPeriodParser
             'from' => $from,
             'to' => $to,
             'unit' => $this->findUnit($question),
+            'payment' => $this->findPayment($question),
             'label' => $from->isSameDay($to)
                 ? $from->format('d-m-Y')
                 : $from->format('d-m-Y') . ' sampai ' . $to->format('d-m-Y'),
@@ -144,6 +145,37 @@ class ChatbotPeriodParser
 
         return $candidates
             ->filter(fn(string $value): bool => $this->fuzzyContains($normalized, $value))
+            ->sortByDesc(fn(string $value): int => mb_strlen($value))
+            ->first();
+    }
+
+    private function findPayment(string $question): ?string
+    {
+        if (!SimgosData::tableExists('kunjungan')) {
+            return null;
+        }
+
+        $columns = SimgosData::columns('kunjungan');
+        $paymentColumn = collect(['CARABAYAR', 'CARA_BAYAR', 'JENIS_BAYAR', 'PENJAMIN'])
+            ->first(fn(string $column): bool => in_array($column, $columns, true));
+
+        if (!$paymentColumn) {
+            return null;
+        }
+
+        $normalized = mb_strtolower($question);
+        $payments = SimgosData::query('kunjungan')
+            ->whereNotNull($paymentColumn)
+            ->where($paymentColumn, '<>', '')
+            ->distinct()
+            ->pluck($paymentColumn)
+            ->map(fn($value): string => trim((string) $value))
+            ->filter()
+            ->unique()
+            ->values();
+
+        return $payments
+            ->filter(fn(string $value): bool => str_contains($normalized, mb_strtolower($value)))
             ->sortByDesc(fn(string $value): int => mb_strlen($value))
             ->first();
     }

@@ -6,9 +6,10 @@ class VisitsQuery extends BaseQuery
 {
     public function summary(array $period): array
     {
-        if (filled($period['unit'] ?? null)) {
+        if (filled($period['unit'] ?? null) || filled($period['payment'] ?? null)) {
             return [
                 'requested_unit' => $period['unit'],
+                'requested_payment' => $period['payment'],
                 'total_kunjungan' => $this->valueTotal('kunjungan', $period),
                 'daily_trend' => $this->dailyTotal('kunjungan', $period),
             ];
